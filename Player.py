@@ -29,6 +29,12 @@ class Players:
         if not user in self.players:
             self.players.append(Player(user))
 
+    def getUsers(self):
+        users = []
+        for player in self.players:
+            users.append(player.getUser())
+        return users
+
     def mentions(self):
         mentions = []
         for player in self.players:

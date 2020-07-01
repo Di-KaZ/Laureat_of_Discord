@@ -14,8 +14,9 @@ class Session:
         self.players.addPlayer(self.creator)
         self.game_started = True
         await ctx.send("Started game with players : [{}]".format(", ".join(self.players.mentions())))
-        for player in self.players:
-            await player.getUser().send("Hey !")
+        users = self.players.getUsers()
+        for player in users:
+            await player.send("Hey !")
 
     async def stop(self, bot_user):
         self.players = Players(self.message)
