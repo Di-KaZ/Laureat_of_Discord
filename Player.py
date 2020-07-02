@@ -98,24 +98,6 @@ class Players:
             return 0
         return 1
 
-    # def calculate_scores(self):
-    #     occurence = []
-    #     acutal_round = 1
-    #     actual_category = 1
-    #     for player in self.players:
-    #         if acutal_round >= self.ground:
-    #             return
-    #         if actual_category >= len(self.categorys):
-    #             dict_occurence = dict.fromkeys(occurence)
-    #             word_with_score = []
-    #             for word in dict_occurence:
-    #                 score = self.get_word_score(occurence, word, len(self.players))
-    #                 word_with_score.append((word, score))
-    #             self.update_players_score(word_with_score, actua)
-    #             actual_category = 1
-    #             acutal_round += 1
-    #         occurence.append(player.getWordTab()[acutal_round][actual_category])
-
     # recup les mots d'une categorie x pour chaqun des joueurs au round y
     # calculer le nombre de fois ou chaque mot apparait
     #attribuer le score obtenable pour chaque mots
@@ -137,6 +119,3 @@ class Players:
                 if player.getWordTab()[actual_round][actual_category] == word_with_score[0]:
                     player.addScore(word_with_score[1])
                     break
-        self.calculate_scores
-# Lol mdr ye
-# aha mdr de
