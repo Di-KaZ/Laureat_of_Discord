@@ -18,7 +18,8 @@ async def on_message(message):
     if message.channel.type is discord.ChannelType.private:
         for session in bot.sessions:
             if message.author in session.getUsers():
-                await session.reciveWord(message.author, message.content)
+                if await session.reciveWord(message.author, message.content):
+                    bot.sessions.remove(session)
     # await message.channel.send("ouais !")
     await bot.process_commands(message)
 
@@ -28,20 +29,23 @@ async def start(ctx):
         if ctx.message.author == session.getOwner():
                 await session.start(ctx.message.author, bot.user, ctx)
                 return
-    ctx.send(f"You have not created any session [{ctx.message.author.mention}]")
+    await ctx.send(f"Tu na pas crée de salon {ctx.message.author.mention} !")
 
 @bot.command()
-async def create_game(ctx, *categorys):
+async def create_game(ctx, ground, *categorys):
+    new_categorys = []
     if ctx.message.author in bot.creators:
-        await ctx.send(f'You are already creating a session {ctx.message.author.mention}')
+        await ctx.send(f'Tu crée déja un salon {ctx.message.author.mention} !')
         return 
     if len(categorys) > 6 or len(categorys) < 1:
-        await ctx.send('You can only create a baccalaureat between 1 and 6 category')
+        await ctx.send('Tu peut seulement avoir entre **1 et 6 catégories**')
         return
     bot.creators.append(ctx.message.author)
-    bot.sessions.append(Session(ctx.message, categorys))
-    create_game_msg = await ctx.send('{} is creating a **Baccalaureat** game with category [**{}**] click the ⚡ to join in !'.format(ctx.message.author.mention,', '.join(categorys)))
+    create_game_msg = await ctx.send('{} crée un salon de **Baccalaureat** avec les catégories [**{}**] appuie sur ⚡ pour la rejoindre !'.format(ctx.message.author.mention,', '.join(categorys)))
     await create_game_msg.add_reaction("⚡")
+    for category in categorys:
+        new_categorys.append(category.upper())
+    bot.sessions.append(Session(create_game_msg, ctx.message.author, ground, new_categorys))
 
 @bot.command()
 async def cancel(ctx):
@@ -49,13 +53,8 @@ async def cancel(ctx):
         for session in bot.sessions:
             if creator == ctx.message.author and creator == session.getOwner():
                 await session.stop(bot.user)
-                await ctx.send('Deleting **Baccalaureat** session of {}\nPlayers were {}'.format(ctx.message.author.mention,', '.join(session.getPlayers().mentions())))
+                await ctx.send('Supression du salon de {}\nLes joueurs {} sont maintenant liiibre !'.format(ctx.message.author.mention,', '.join(session.getPlayers().mentions())))
                 bot.sessions.remove(session)
                 bot.creators.remove(creator)
-
-# @bot.command()
-#     async def add_word_in_category():
-
-
 
 bot.run(g_secret)
