@@ -78,6 +78,3 @@ class Session:
                     return False               
                 await user.send("Les catégories sont [**{}**], La lettre est : **{}**".format(', '.join(self.categorys), self.letter))
         return False
-
-    def caclulate_scores(self):
-        return

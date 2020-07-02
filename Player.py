@@ -87,3 +87,30 @@ class Players:
                     await user.send(f"Le round {actual_round + 1} est terminé {player.getUser().mention} est le premier a l'avoir terminé !")
                 return True
         return False
+    def get_word_score(self, words, word, num_players):
+        word_count = words.count(word)
+        if word_count == 1:
+            return 2
+        if word_count == num_players:
+            return 0
+        return 1
+
+    def calculate_scores(self):
+        occurence = []
+        acutal_round = 1
+        actual_category = 1
+        for player in self.players:
+            if acutal_round >= self.ground:
+                return
+            if actual_category >= len(self.categorys):
+                actual_category = 1
+                acutal_round += 1
+                dict_occurence = dict.fromkeys(occurence)
+                word_with_score = []
+                for word in dict_occurence:
+                    score = self.get_word_score(occurence, word, len(self.players))
+                    word_with_score.append((word, score))
+            occurence.append(player.getWordTab()[acutal_round][actual_category])
+
+# Lol mdr ye
+# aha mdr de
