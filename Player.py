@@ -25,9 +25,13 @@ class Players:
         message_id = self.message.id
         channel = self.message.channel
         message = await channel.fetch_message(message_id)
+        print(len(message.reactions))
         for reaction in message.reactions:
+            print('ye')
             if reaction.emoji == "⚡":
+                print('gotcha')
                 async for user in reaction.users():
+                    print(user)
                     if user != bot_user and not user in self.players:
                         self.players.append(Player(user))
 
