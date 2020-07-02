@@ -1,5 +1,3 @@
-from numpy import matrix
-
 class Player:
     def __init__(self, user, categorys, ground):
         self.user = user
@@ -37,6 +35,9 @@ class Player:
 
     def addScore(self, points):
         self.score += points
+    
+    def getScore(self):
+        return self.score
 
 class Players:
     def __init__(self, message, categorys, ground):
@@ -88,6 +89,8 @@ class Players:
                 return True
         return False
     def get_word_score(self, words, word, num_players):
+        if word == '':
+            return 0
         word_count = words.count(word)
         if word_count == 1:
             return 2
@@ -95,22 +98,45 @@ class Players:
             return 0
         return 1
 
-    def calculate_scores(self):
-        occurence = []
-        acutal_round = 1
-        actual_category = 1
-        for player in self.players:
-            if acutal_round >= self.ground:
-                return
-            if actual_category >= len(self.categorys):
-                actual_category = 1
-                acutal_round += 1
-                dict_occurence = dict.fromkeys(occurence)
-                word_with_score = []
-                for word in dict_occurence:
-                    score = self.get_word_score(occurence, word, len(self.players))
-                    word_with_score.append((word, score))
-            occurence.append(player.getWordTab()[acutal_round][actual_category])
+    # def calculate_scores(self):
+    #     occurence = []
+    #     acutal_round = 1
+    #     actual_category = 1
+    #     for player in self.players:
+    #         if acutal_round >= self.ground:
+    #             return
+    #         if actual_category >= len(self.categorys):
+    #             dict_occurence = dict.fromkeys(occurence)
+    #             word_with_score = []
+    #             for word in dict_occurence:
+    #                 score = self.get_word_score(occurence, word, len(self.players))
+    #                 word_with_score.append((word, score))
+    #             self.update_players_score(word_with_score, actua)
+    #             actual_category = 1
+    #             acutal_round += 1
+    #         occurence.append(player.getWordTab()[acutal_round][actual_category])
 
+    # recup les mots d'une categorie x pour chaqun des joueurs au round y
+    # calculer le nombre de fois ou chaque mot apparait
+    #attribuer le score obtenable pour chaque mots
+    # donner le score du mots correspondant au player
+    def calculate_scores(self, actual_round, actual_category):
+        words_occurence = []
+        words_with_score = []
+        for player in self.players: # les mots de chaque joueurs dans la categorie x au round y
+            words_occurence.append(player.getWordTab()[actual_round][actual_category])
+        dict_occurence = dict.fromkeys(words_occurence) #sans doublon
+        for word in dict_occurence: # on associe mot et score
+            if word == '':
+                continue
+            score = self.get_word_score(words_occurence, word, len(self.players))
+            words_with_score.append((word, score))
+        print(words_with_score)
+        for player in self.players:
+            for word_with_score in words_with_score:
+                if player.getWordTab()[actual_round][actual_category] == word_with_score[0]:
+                    player.addScore(word_with_score[1])
+                    break
+        self.calculate_scores
 # Lol mdr ye
 # aha mdr de

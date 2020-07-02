@@ -41,20 +41,31 @@ class Session:
         return self.users
 
     async def new_round(self):
+        for i in range(1, len(self.categorys) + 1):
+            self.players.calculate_scores(self.actual_round + 1, i)
         self.actual_round += 1
         if await self.end_of_game():
             return True
         self.letter = random.choice(self.alphabet) # chosing renadom letter 
         self.alphabet = self.alphabet.replace(self.letter, '') # removing letter from the game
         self.players.round_start(self.letter, self.actual_round)
-        for user in self.users:
-            await user.send("La lettre est : **{}**\nLes catégorie sont [**{}**]\nPour remplir une categorie faite le numero de la categorie suivit du mot.".format(self.letter, ', '.join(self.categorys)))
+        players = self.players.getplayers()
+        for player in players:
+            await player.getUser().send("Ton score pour ce round est de **{} pts**\n===== Round {} =====\nLa lettre est : **{}**\nLes catégorie sont [**{}**]\nPour remplir une categorie faite le numero de la categorie suivit du mot.".format(player.getScore(), self.actual_round + 1, self.letter, ', '.join(self.categorys)))
         return False
 
     async def end_of_game(self):
+        podium = []
         if self.actual_round >= self.round:
-            for user in self.users:
-                await user.send("La Partie est terminé")
+            players = self.players.getplayers()
+            for player in players:
+                podium.append((player.getUser(), player.getScore()))
+                await player.getUser().send(f"La Partie est terminé ton score est de **{player.getScore()} pts**")
+                podium.sort(key=lambda x:x[1], reverse=True)
+                podium_final = []
+                for elem in podium:
+                    podium_final.append('|\t' + elem[0].mention + '\t|\t**' + str(elem[1]) + ' pts**\t|')
+            await self.message.channel.send("La partie de {} avec les catégories [**{}**] est terminé ({} rounds)\n=====\tScores\t=====\n {}".format(self.creator.mention, ', '.join(self.categorys), self.round, '\n'.join(podium_final)))
             return True
 
     async def reciveWord(self, user, message_str):
@@ -71,7 +82,7 @@ class Session:
                     await temp.delete(delay=2)
                     return
                 await player.register_word(split_msg[0], split_msg[1], self.actual_round)
-                await user.send(f"**{split_msg[1]}** à été ajouté a votre catégorie**{self.categorys[int(split_msg[0]) - 1]}**.")
+                await user.send(f"**{split_msg[1]}** à été ajouté a votre catégorie** {self.categorys[int(split_msg[0]) - 1]}**.")
                 if await self.players.is_players_round_finish(self.actual_round):
                     if await self.new_round():
                         return True

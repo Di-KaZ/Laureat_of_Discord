@@ -41,7 +41,7 @@ async def create_game(ctx, ground, *categorys):
         await ctx.send('Tu peut seulement avoir entre **1 et 6 catégories**')
         return
     bot.creators.append(ctx.message.author)
-    create_game_msg = await ctx.send('{} crée un salon de **Baccalaureat** avec les catégories [**{}**] appuie sur ⚡ pour la rejoindre !'.format(ctx.message.author.mention,', '.join(categorys)))
+    create_game_msg = await ctx.send('{} crée un salon de **Baccalaureat** avec les catégories [**{}**] elle dureras **{} round** appuie sur ⚡ pour la rejoindre !'.format(ctx.message.author.mention,', '.join(categorys), ground))
     await create_game_msg.add_reaction("⚡")
     for category in categorys:
         new_categorys.append(category.upper())
@@ -56,5 +56,7 @@ async def cancel(ctx):
                 await ctx.send('Supression du salon de {}\nLes joueurs {} sont maintenant liiibre !'.format(ctx.message.author.mention,', '.join(session.getPlayers().mentions())))
                 bot.sessions.remove(session)
                 bot.creators.remove(creator)
+    temp = await ctx.message.channel.send(f"Nani {ctx.message.author.mention} ?? ")
+    await temp.delete(delay=2)
 
 bot.run(g_secret)
