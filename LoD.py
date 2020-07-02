@@ -15,6 +15,10 @@ bot.sessions = []
 async def on_message(message):
     if message.author == bot.user:
         return
+    if message.channel.type is discord.ChannelType.private:
+        for session in bot.sessions:
+            if message.author in session.getUsers():
+                await session.reciveWord(message.author, message.content)
     # await message.channel.send("ouais !")
     await bot.process_commands(message)
 
@@ -48,5 +52,10 @@ async def cancel(ctx):
                 await ctx.send('Deleting **Baccalaureat** session of {}\nPlayers were {}'.format(ctx.message.author.mention,', '.join(session.getPlayers().mentions())))
                 bot.sessions.remove(session)
                 bot.creators.remove(creator)
+
+# @bot.command()
+#     async def add_word_in_category():
+
+
 
 bot.run(g_secret)

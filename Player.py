@@ -10,6 +10,12 @@ class Player:
     def getMention(self):
         return self.user.mention
 
+    def user_is_player(self, user):
+        return self.user == user
+
+    async def register_word(self, category_num, word):
+        return
+
 class Players:
     def __init__(self, message):
         self.players = []
@@ -34,6 +40,9 @@ class Players:
         for player in self.players:
             users.append(player.getUser())
         return users
+
+    def getplayers(self):
+        return self.players
 
     def mentions(self):
         mentions = []
