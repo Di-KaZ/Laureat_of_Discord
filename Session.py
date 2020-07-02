@@ -8,10 +8,13 @@ class Session:
         self.creator = creator
         self.game_started = False
         self.categorys = categorys
+        self.display_categorys = []
         self.players = None
         self.users = None
         self.alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         self.actual_round = 0
+        for i, category in enumerate(self.categorys):
+            self.display_categorys.append(str(i + 1) + '.' + category)
 
     async def start(self, user, bot_user, ctx):
         self.players = Players(self.message, self.categorys, self.round)
@@ -24,7 +27,7 @@ class Session:
         self.alphabet = self.alphabet.replace(self.letter, '') # removing letter from the game
         self.players.round_start(self.letter, self.actual_round)
         for user in self.users:
-            await user.send("La partie a commencé !\nLa première lettre est : **{}**\nLes categories sont [**{}**]\nPour remplir une categorie faite le numero de la categorie suivit du mot.".format(self.letter, ', '.join(self.categorys)))
+            await user.send("La partie a commencé !\nLa première lettre est : **{}**\nLes categories sont [**{}**]\nPour remplir une categorie faite le numero de la categorie suivit du mot.".format(self.letter, ', '.join(self.display_categorys)))
 
     async def stop(self, bot_user):
         self.players = Players(self.message, self.categorys, self.round)
@@ -51,7 +54,7 @@ class Session:
         self.players.round_start(self.letter, self.actual_round)
         players = self.players.getplayers()
         for player in players:
-            await player.getUser().send("Ton score pour ce round est de **{} pts**\n===== Round {} =====\nLa lettre est : **{}**\nLes catégorie sont [**{}**]\nPour remplir une categorie faite le numero de la categorie suivit du mot.".format(player.getScore(), self.actual_round + 1, self.letter, ', '.join(self.categorys)))
+            await player.getUser().send("Ton score pour ce round est de **{} pts**\n===== Round {} =====\nLa lettre est : **{}**\nLes catégories sont [**{}**]\nPour remplir une categorie faite le numero de la categorie suivit du mot.".format(player.getScore(), self.actual_round + 1, self.letter, ', '.join(self.display_categorys)))
         return False
 
     async def end_of_game(self):
@@ -87,5 +90,5 @@ class Session:
                     if await self.new_round():
                         return True
                     return False               
-                await user.send("Les catégories sont [**{}**], La lettre est : **{}**".format(', '.join(self.categorys), self.letter))
+                await user.send("Les catégories sont [**{}**], La lettre est : **{}**".format(', '.join(self.display_categorys), self.letter))
         return False
