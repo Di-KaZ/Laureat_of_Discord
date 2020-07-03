@@ -19,6 +19,7 @@ async def on_message(message):
         for session in bot.sessions:
             if message.author in session.getUsers():
                 if await session.reciveWord(message.author, message.content):
+                    bot.creators.remove(session.getOwner())
                     bot.sessions.remove(session)
     # await message.channel.send("ouais !")
     await bot.process_commands(message)
@@ -56,6 +57,7 @@ async def cancel(ctx):
                 await ctx.send('Supression du salon de {}\nLes joueurs {} sont maintenant liiibre !'.format(ctx.message.author.mention,', '.join(session.getPlayers().mentions())))
                 bot.sessions.remove(session)
                 bot.creators.remove(creator)
+                return
     temp = await ctx.message.channel.send(f"Nani {ctx.message.author.mention} ?? ")
     await temp.delete(delay=2)
 

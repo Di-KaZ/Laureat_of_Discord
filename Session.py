@@ -1,6 +1,13 @@
 from Player import Players
 import random
 
+def awesome_print2(matrix):
+    s = [[str(e) for e in row] for row in matrix]
+    lens = [max(map(len, col)) for col in zip(*s)]
+    fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
+    table = [fmt.format(*row) for row in s]
+    return table
+
 class Session:
     def __init__(self, message, creator, ground, categorys):
         self.message = message
@@ -54,7 +61,7 @@ class Session:
         self.players.round_start(self.letter, self.actual_round)
         players = self.players.getplayers()
         for player in players:
-            await player.getUser().send("Ton score pour ce round est de **{} pts**\n===== Round {} =====\nLa lettre est : **{}**\nLes catégories sont [**{}**]\nPour remplir une categorie faite le numero de la categorie suivit du mot.".format(player.getScore(), self.actual_round + 1, self.letter, ', '.join(self.display_categorys)))
+            await player.getUser().send("Ton score est de **{} pts**\n===== **Round {}** =====\nLa lettre est : **{}**\nLes catégories sont [**{}**]\nPour remplir une categorie faite le numero de la categorie suivit du mot.".format(player.getScore(), self.actual_round + 1, self.letter, ', '.join(self.display_categorys)))
         return False
 
     async def end_of_game(self):
@@ -63,12 +70,12 @@ class Session:
             players = self.players.getplayers()
             for player in players:
                 podium.append((player.getUser(), player.getScore()))
-                await player.getUser().send(f"La Partie est terminé ton score est de **{player.getScore()} pts**")
+                await player.getUser().send("La Partie est terminé ton score est de **{} pts**\n voici ton tableau ->\n```{}```".format(player.getScore(), '\n'.join(awesome_print2(player.getWordTab()))))
                 podium.sort(key=lambda x:x[1], reverse=True)
                 podium_final = []
                 for elem in podium:
-                    podium_final.append('|\t' + elem[0].mention + '\t|\t**' + str(elem[1]) + ' pts**\t|')
-            await self.message.channel.send("La partie de {} avec les catégories [**{}**] est terminé ({} rounds)\n=====\tScores\t=====\n {}".format(self.creator.mention, ', '.join(self.categorys), self.round, '\n'.join(podium_final)))
+                    podium_final.append('|\t' + elem[0].name + '#' + elem[0].discriminator + '\t|\t' + str(elem[1]) + ' pts\t|')
+            await self.message.channel.send("La partie de {} avec les catégories [**{}**] est terminé ({} rounds)\n```\t=====\tscores\t=====\t\n{}```".format(self.creator.mention, ', '.join(self.categorys), self.round, '\n'.join(podium_final)))
             return True
 
     async def reciveWord(self, user, message_str):

@@ -7,6 +7,7 @@ class Player:
         self.words = [['' for x in range(len(categorys) + 1)] for y in range(int(ground) + 1)]
         for i, category in enumerate(categorys):
             self.words[0][i + 1] = category
+        self.words[0][0] = user.name + '#' + user.discriminator
 
     def getUser(self):
         return self.user
