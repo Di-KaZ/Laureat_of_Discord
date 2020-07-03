@@ -1,7 +1,7 @@
 from Player import Players
 import random
 
-def awesome_print2(matrix):
+def pretty2dtab(matrix):
     s = [[str(e) for e in row] for row in matrix]
     lens = [max(map(len, col)) for col in zip(*s)]
     fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
@@ -70,11 +70,11 @@ class Session:
             players = self.players.getplayers()
             for player in players:
                 podium.append((player.getUser(), player.getScore()))
-                await player.getUser().send("La Partie est terminé ton score est de **{} pts**\n voici ton tableau ->\n```{}```".format(player.getScore(), '\n'.join(awesome_print2(player.getWordTab()))))
+                await player.getUser().send("La Partie est terminé ton score est de **{} pts**\n voici ton tableau ->\n```{}```".format(player.getScore(), '\n'.join(pretty2dtab(player.getWordTab()))))
                 podium.sort(key=lambda x:x[1], reverse=True)
                 podium_final = []
                 for elem in podium:
-                    podium_final.append('|\t' + elem[0].name + '#' + elem[0].discriminator + '\t|\t' + str(elem[1]) + ' pts\t|')
+                    podium_final.append(elem[0].name + '#' + elem[0].discriminator + '\t' + str(elem[1]) + ' pts')
             await self.message.channel.send("La partie de {} avec les catégories [**{}**] est terminé ({} rounds)\n```\t=====\tscores\t=====\t\n{}```".format(self.creator.mention, ', '.join(self.categorys), self.round, '\n'.join(podium_final)))
             return True
 
