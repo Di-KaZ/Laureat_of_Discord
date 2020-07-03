@@ -114,7 +114,6 @@ class Players:
                 continue
             score = self.get_word_score(words_occurence, word, len(self.players))
             words_with_score.append((word, score))
-        print(words_with_score)
         for player in self.players:
             for word_with_score in words_with_score:
                 if player.getWordTab()[actual_round][actual_category] == word_with_score[0]:

@@ -75,7 +75,9 @@ class Session:
                 podium_final = []
                 for elem in podium:
                     podium_final.append(elem[0].name + '#' + elem[0].discriminator + '\t' + str(elem[1]) + ' pts')
-            await self.message.channel.send("La partie de {} avec les catégories [**{}**] est terminé ({} rounds)\n```\t=====\tscores\t=====\t\n{}```".format(self.creator.mention, ', '.join(self.categorys), self.round, '\n'.join(podium_final)))
+            await self.message.channel.send("La partie de {} avec les catégories [**{}**] est terminé ({} rounds)\n```\t=====\tscores\t=====\t\n{}\n```Les boards :\n".format(self.creator.mention, ', '.join(self.categorys), self.round, '\n'.join(podium_final), ))
+            for player in self.players.getplayers():
+                await self.message.channel.send("```{}```".format('\n'.join(pretty2dtab(player.getWordTab()))))
             return True
 
     async def reciveWord(self, user, message_str):
