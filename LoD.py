@@ -30,7 +30,7 @@ async def start(ctx):
         if ctx.message.author == session.getOwner():
                 await session.start(ctx.message.author, bot.user, ctx)
                 return
-    await ctx.send(f"Tu na pas crée de salon {ctx.message.author.mention} !")
+    await ctx.send(f"tu n'as pas créé {ctx.message.author.mention} !")
 
 @bot.command()
 async def create_game(ctx, ground, *categorys):
