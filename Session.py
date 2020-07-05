@@ -22,9 +22,7 @@ class Session:
         await self.invitation.channel.send(g_start_session.format(self.owner.mention))
         self.letter = random.choice(self.alphabet) # chosing renadom letter 
         self.alphabet = self.alphabet.replace(self.letter, '') # removing letter from the game
-        self.player_manager.roundStart(self.players, self.letter, self.actual_round)
-        for player in self.players:
-            await player.getUser().send(g_start_session_player.format(self.letter, ', '.join(self.categories)))
+        await self.player_manager.roundStart(self.players, self.letter, self.actual_round)
 
     async def stop(self, bot_user):
         await self.player_manager.initPlayers(bot_user)
@@ -50,22 +48,21 @@ class Session:
             return True
         self.letter = random.choice(self.alphabet) # chosing renadom letter 
         self.alphabet = self.alphabet.replace(self.letter, '') # removing letter from the session
-        self.player_manager.roundStart(self.players, self.letter, self.actual_round)
+        await self.player_manager.roundStart(self.players, self.letter, self.actual_round)
         for player in self.players:
-            await player.getUser().send(g_new_round_player.format(player.getRoundScore(self.actual_round), self.actual_round + 1, self.letter, ', '.join(self.categories)))
+            await player.getUser().send(g_new_round_player.format(player.getRoundScore(self.actual_round), self.actual_round + 1))
         return False
 
     async def end_of_game(self):
         podium = []
         if self.actual_round >= self.num_round:
             for player in self.players:
-                podium.append((player.getUser(), player.getScore()))
+                podium.append([player.getUser(), player.getScore(), 'pts'])
                 await player.getUser().send(g_end_session_player.format(player.getScore(), '\n'.join(format_tab(player.getWordTab()))))
                 podium.sort(key=lambda x:x[1], reverse=True)
-                podium_final = []
-                for elem in podium:
-                    podium_final.append(elem[0].name + '#' + elem[0].discriminator + '\t' + str(elem[1]) + ' pts')
-            await self.invitation.channel.send(g_end_session.format(self.owner.mention, ', '.join(self.categories), self.num_round, '\n'.join(podium_final)))
+            await self.invitation.channel.send(g_end_session.format(self.owner.mention, ', '.join(self.categories), self.num_round, '\n'.join(format_tab(podium))))
+            for player in self.players:
+                await self.invitation.channel.send("```{}```".format('\n'.join(format_tab(player.getWordTab()))))
             return True
         return False
 
@@ -82,14 +79,9 @@ class Session:
                     temp = await user.send(g_invalid_word.format(message_str))
                     await temp.delete(delay=2)
                     return False
-                print(split_msg[0])
-                print(split_msg[1])
-                print(self.actual_round)
-                player.addWord(split_msg[0], split_msg[1], self.actual_round)
-                await player.getUser().send(g_added_word.format(split_msg[1], self.categories[int(split_msg[0]) - 1]))
+                await player.addWord(split_msg[0], split_msg[1], self.actual_round)
                 if await self.player_manager.isPlayersRoundFinish(self.players, self.actual_round):
                     if await self.new_round():
                         return True
                     return False               
-                await player.getUser().send(g_new_round_annonce.format(', '.join(self.categories), self.letter))
         return False
