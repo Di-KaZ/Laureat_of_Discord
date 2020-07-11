@@ -2,7 +2,7 @@
 
 Be the smartest guy on discord !
 
-Laureat of discord aim to be able to recreate the Baccalaureat game fro your childhood directly into discord.
+Laureat of discord aim to be able to recreate the Baccalaureat game from your childhood directly into discord.
 
 The rule are simple you choose some category ex : **Name, Animal, Contry** and a random letter here **P**.
 
@@ -30,7 +30,7 @@ here are the avalible command for now (all command have to be prepend by a '!'):
 
 When the session as started you have to play in dm with the bot, you will see a board with the first letter and the categories.
 To put word in categories you have to put the numer of the categories followes by your word.
-in the example Animal is the 2nd categories so send "2 Peacock" to the bot will fill the board with Peacock in category Animal.
+in the example Animal is the 2nd categories so send ```2 Peacock``` to the bot will fill the board with Peacock in category Animal.
 
 That's how you play !
 
