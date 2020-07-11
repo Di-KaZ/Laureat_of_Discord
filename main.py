@@ -5,7 +5,7 @@ from discord.ext import commands
 from text import *
 from Session import Session
 
-g_secret = 'NzI3NDYwMDU0MDA1MTg2NjM0.XvxkVQ.bHsCXP1GyINMGd9tYBAnk53__2Q'
+g_secret = 'your secret here'
 bot = commands.Bot(command_prefix='!')
 bot.sessions = []
 
