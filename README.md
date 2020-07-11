@@ -37,3 +37,5 @@ That's how you play !
 In the future i want to add a dictionnary for common categories, a better way to enter word in category and a timeout to round.
 
 Dependencies : [Discord.py](https://discordpy.readthedocs.io/en/latest/)
+
+You can easily change the language by editing the text.py file

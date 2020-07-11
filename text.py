@@ -12,3 +12,4 @@ g_invitation = '{} crée un salon de **Baccalaureat** avec les catégories [**{}
 g_error_in_session = 'Tu crée (ou appartient) déja a un salon {} !'
 g_session_cancel = 'Supression du salon de {}'
 g_default_error_msg = "Nani {} ?? "
+g_round_end_players = "Le round {} est terminé {} est le premier a l'avoir terminé !"

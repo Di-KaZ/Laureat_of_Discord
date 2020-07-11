@@ -9,7 +9,6 @@ g_secret = 'NzI3NDYwMDU0MDA1MTg2NjM0.XvxkVQ.bHsCXP1GyINMGd9tYBAnk53__2Q'
 bot = commands.Bot(command_prefix='!')
 bot.sessions = []
 
-""" faire en sorte de pouvoir update le tableau en face du joueur et ne plus afficher 15 mille message """
 @bot.event
 async def on_message(message):
     if message.author == bot.user:

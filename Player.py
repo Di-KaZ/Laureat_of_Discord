@@ -1,4 +1,5 @@
 from utils import format_tab
+from text import *
 
 class Player:
     def __init__(self, user, categories, num_round):
@@ -103,7 +104,7 @@ class PlayersManager:
         for player in players:
             if await player.finishRound(actual_round):
                 for player_two in players:
-                    await player_two.getUser().send(f"Le round {actual_round + 1} est terminé {player.getUser().mention} est le premier a l'avoir terminé !")
+                    await player_two.getUser().send(g_round_end_players.format(actual_round + 1, player.getUser().mention))
                 return True
         return False
 
